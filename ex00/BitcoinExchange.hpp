@@ -6,7 +6,7 @@
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:29:19 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/02 15:45:54 by ojacobs          ###   ########.fr       */
+/*   Updated: 2025/07/04 19:16:16 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include <sstream>
 #include <fstream>
 #include <cctype>
+#include <iomanip>
 
 
 class BitcoinExchange
@@ -29,5 +30,5 @@ public:
 	BitcoinExchange& operator =(const BitcoinExchange &src);
 	~BitcoinExchange();
 	void set_btc_Data(const std::string& filename);
-	void set_input_Data(const std::string& filename, std::ifstream &input);
+	void set_input_Data(std::ifstream &input);
 };

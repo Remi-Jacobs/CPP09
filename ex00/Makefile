@@ -6,7 +6,34 @@
 #    By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 19:55:39 by ojacobs           #+#    #+#              #
-#    Updated: 2025/07/03 19:56:10 by ojacobs          ###   ########.fr        #
+#    Updated: 2025/07/04 19:17:50 by ojacobs          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
+CXX = g++
+
+CXXFLAGS = -Wall -Wextra -Werror -std=c++98
+
+NAME = Bitcoin_Exchange
+
+SRCS = BitcoinExchange.cpp main.cpp
+
+OBJS = $(SRCS:.cpp=.o)
+
+all: $(NAME)
+
+$(NAME): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $(NAME) $(OBJS)
+
+%.o: %.cpp
+	$(CXX) $(CXXFLAGS) -c $< -o $@
+
+clean:
+	rm -f $(OBJS)
+
+fclean: clean
+	rm -f $(NAME)
+
+re: fclean all
+
+.PHONY: all clean fclean re

@@ -6,7 +6,7 @@
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:29:14 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/03 20:23:30 by ojacobs          ###   ########.fr       */
+/*   Updated: 2025/07/04 19:15:55 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,19 +82,45 @@ bool parseValue(const std::string& s, double& out)
 
 // Load data.csv exchange rates into map
 
+BitcoinExchange::BitcoinExchange() {}
+
+BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
+{
+    this->btc_Data = src.btc_Data;
+    this->input_Data = src.input_Data;
+}
+
+BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &src)
+{
+    if (this != &src)
+    {
+        this->btc_Data = src.btc_Data;
+        this->input_Data = src.input_Data;
+    }
+    return *this;
+}
+
+BitcoinExchange::~BitcoinExchange() {}
+
+// ======= Load btc_Data =======
+
 void BitcoinExchange::set_btc_Data(const std::string& filename)
 {
-    // std::map<std::string, double> btc_Data;
     std::ifstream file(filename.c_str());
-    std::string line;
+    if (!file)
+    {
+        std::cerr << "Error: could not open " << filename << std::endl;
+        return;
+    }
 
-    std::getline(file, line);
-    while(std::getline(file, line))
+    std::string line;
+    std::getline(file, line); // Skip header
+
+    while (std::getline(file, line))
     {
         std::stringstream ss(line);
-        std::string date;
-        std::string rate;
-        if(std::getline(ss, date, ',') && std::getline(ss, rate))
+        std::string date, rate;
+        if (std::getline(ss, date, ',') && std::getline(ss, rate))
         {
             std::stringstream conv(rate);
             double conv_rate;
@@ -104,36 +130,16 @@ void BitcoinExchange::set_btc_Data(const std::string& filename)
         }
     }
 }
-// std::map<std::string, double> loadExchangeRates(const std::string& filename)
-// {
-//     std::map<std::string, double> rates;
-//     std::ifstream file(filename.c_str());
-//     std::string line;
 
-//     std::getline(file, line); // Skip header
+// ======= Process input file =======
 
-//     while (std::getline(file, line)) {
-//         std::stringstream ss(line);
-//         std::string date, rateStr;
-//         if (std::getline(ss, date, ',') && std::getline(ss, rateStr))
-//         {
-//             std::stringstream conv(rateStr);
-//             double rate;
-//             conv >> rate;
-//             if (!conv.fail())
-//                 rates[Trim(date)] = rate;
-//         }
-//     }
-//     return rates;
-// }
-
-void BitcoinExchange::set_input_Data(const std::string& filename, std::ifstream &input)
+void BitcoinExchange::set_input_Data(std::ifstream &input)
 {
     std::string line;
-    std::getline(input, line); // Skip header line
-    
-      while (std::getline(input, line))
-      {
+    std::getline(input, line); // Skip header
+
+    while (std::getline(input, line))
+    {
         size_t pipe = line.find('|');
         if (pipe == std::string::npos)
         {
@@ -145,7 +151,8 @@ void BitcoinExchange::set_input_Data(const std::string& filename, std::ifstream 
         std::string valueStr = Trim(line.substr(pipe + 1));
         double value;
 
-        if (!isValidDate(date)) {
+        if (!isValidDate(date))
+        {
             std::cout << "Error: bad input => " << line << std::endl;
             continue;
         }
@@ -153,67 +160,40 @@ void BitcoinExchange::set_input_Data(const std::string& filename, std::ifstream 
         if (!parseValue(valueStr, value))
             continue;
 
-        std::map<std::string, double>::iterator it = exchangeRates.upper_bound(date);
-        if (it != exchangeRates.begin()) {
+        std::map<std::string, double>::iterator it = btc_Data.upper_bound(date);
+        if (it != btc_Data.begin())
+        {
             --it;
             double rate = it->second;
             std::cout << date << " => " << value << " = "
                       << std::fixed << std::setprecision(2)
                       << (value * rate) << std::endl;
-        } else {
+        }
+        else
+        {
             std::cout << "Error: no exchange rate available for " << date << std::endl;
         }
     }
-    
 }
 
-int main(int argc, char** argv) {
-    if (argc != 2) {
-        std::cout << "Error: could not open file." << std::endl;
+int main(int argc, char** argv)
+{
+    if (argc != 2)
+    {
+        std::cerr << "Error: could not open file." << std::endl;
         return 1;
     }
 
     std::ifstream input(argv[1]);
-    if (!input) {
-        std::cout << "Error: could not open file." << std::endl;
+    if (!input)
+    {
+        std::cerr << "Error: could not open file." << std::endl;
         return 1;
     }
 
-    std::map<std::string, double> exchangeRates = loadExchangeRates("data.csv");
-
-    std::string line;
-    std::getline(input, line); // Skip header line
-
-    while (std::getline(input, line)) {
-        size_t pipe = line.find('|');
-        if (pipe == std::string::npos) {
-            std::cout << "Error: bad input => " << line << std::endl;
-            continue;
-        }
-
-        std::string date = trim(line.substr(0, pipe));
-        std::string valueStr = trim(line.substr(pipe + 1));
-        double value;
-
-        if (!isValidDate(date)) {
-            std::cout << "Error: bad input => " << line << std::endl;
-            continue;
-        }
-
-        if (!parseValue(valueStr, value))
-            continue;
-
-        std::map<std::string, double>::iterator it = exchangeRates.upper_bound(date);
-        if (it != exchangeRates.begin()) {
-            --it;
-            double rate = it->second;
-            std::cout << date << " => " << value << " = "
-                      << std::fixed << std::setprecision(2)
-                      << (value * rate) << std::endl;
-        } else {
-            std::cout << "Error: no exchange rate available for " << date << std::endl;
-        }
-    }
+    BitcoinExchange btc;
+    btc.set_btc_Data("data.csv");
+    btc.set_input_Data(input);
 
     return 0;
 }
