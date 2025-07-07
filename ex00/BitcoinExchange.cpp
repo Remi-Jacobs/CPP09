@@ -6,11 +6,13 @@
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/06/24 19:29:14 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/04 19:15:55 by ojacobs          ###   ########.fr       */
+/*   Updated: 2025/07/07 21:27:27 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "BitcoinExchange.hpp"
+
+
 
 // Trim leading and trailing whitespace because input is string and might not be controlled.
 
@@ -87,7 +89,6 @@ BitcoinExchange::BitcoinExchange() {}
 BitcoinExchange::BitcoinExchange(const BitcoinExchange &src)
 {
     this->btc_Data = src.btc_Data;
-    this->input_Data = src.input_Data;
 }
 
 BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &src)
@@ -95,7 +96,6 @@ BitcoinExchange& BitcoinExchange::operator=(const BitcoinExchange &src)
     if (this != &src)
     {
         this->btc_Data = src.btc_Data;
-        this->input_Data = src.input_Data;
     }
     return *this;
 }
@@ -133,7 +133,7 @@ void BitcoinExchange::set_btc_Data(const std::string& filename)
 
 // ======= Process input file =======
 
-void BitcoinExchange::set_input_Data(std::ifstream &input)
+void BitcoinExchange::find_btc_exchange(std::ifstream &input)
 {
     std::string line;
     std::getline(input, line); // Skip header
@@ -193,7 +193,7 @@ int main(int argc, char** argv)
 
     BitcoinExchange btc;
     btc.set_btc_Data("data.csv");
-    btc.set_input_Data(input);
+    btc.find_btc_exchange(input);
 
     return 0;
 }

@@ -6,7 +6,7 @@
 #    By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2025/07/03 19:55:39 by ojacobs           #+#    #+#              #
-#    Updated: 2025/07/07 12:48:20 by ojacobs          ###   ########.fr        #
+#    Updated: 2025/07/07 12:49:30 by ojacobs          ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -14,9 +14,9 @@ CXX = g++
 
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-NAME = btc
+NAME = RPN
 
-SRCS = BitcoinExchange.cpp main.cpp
+SRCS = RPN.cpp main.cpp
 
 OBJS = $(SRCS:.cpp=.o)
 

@@ -1,33 +1,29 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   BitcoinExchange.hpp                                :+:      :+:    :+:   */
+/*   RPN.hpp                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2025/06/24 19:29:19 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/07 21:26:09 by ojacobs          ###   ########.fr       */
+/*   Created: 2025/07/07 12:49:38 by ojacobs           #+#    #+#             */
+/*   Updated: 2025/07/07 17:20:50 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <map>
-#include <string>
+#include <stack>
 #include <iostream>
+#include <string>
 #include <sstream>
-#include <fstream>
-#include <cctype>
-#include <iomanip>
 
-
-class BitcoinExchange
+class RPN
 {
-private:
-	std::map<std::string, double> btc_Data;
-public:
-	BitcoinExchange();
-	BitcoinExchange(const BitcoinExchange &src);
-	BitcoinExchange& operator =(const BitcoinExchange &src);
-	~BitcoinExchange();
-	void set_btc_Data(const std::string& filename);
-	void find_btc_exchange(std::ifstream &input);
+	private:
+		std::stack <int,int> rpn;
+	
+	public:
+		RPN();
+		RPN(const RPN &src);
+		RPN& operator=(const RPN &src);
+		~RPN();
+		int doPolishNotation(const char *str);
 };
