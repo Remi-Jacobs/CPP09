@@ -6,24 +6,35 @@
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/07 12:49:38 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/07 17:20:50 by ojacobs          ###   ########.fr       */
+/*   Updated: 2025/07/09 19:45:13 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#ifndef RPN_HPP
+#define RPN_HPP
+
 #include <stack>
-#include <iostream>
 #include <string>
-#include <sstream>
+#include <stdexcept>
+#include <cctype>
+#include <iostream>
 
 class RPN
 {
-	private:
-		std::stack <int,int> rpn;
-	
-	public:
-		RPN();
-		RPN(const RPN &src);
-		RPN& operator=(const RPN &src);
-		~RPN();
-		int doPolishNotation(const char *str);
+private:
+    std::stack<int> para;     // operand stack
+    std::stack<char> ops;     // operator stack
+
+    int perform_operation(int a, int b);
+    void quick_maths();
+
+public:
+    RPN();
+    RPN(const RPN& src);
+    RPN& operator=(const RPN& src);
+    ~RPN();
+
+    int do_RPN(const std::string& target);
 };
+
+#endif
