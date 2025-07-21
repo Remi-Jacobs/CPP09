@@ -6,7 +6,7 @@
 /*   By: ojacobs <ojacobs@student.42.fr>            +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2025/07/15 15:25:07 by ojacobs           #+#    #+#             */
-/*   Updated: 2025/07/19 18:01:20 by ojacobs          ###   ########.fr       */
+/*   Updated: 2025/07/21 19:24:39 by ojacobs          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,157 +53,154 @@ void PmergeMe::CheckAndPrintArgs(int ac, const char **argv)
 	}
 }
 
-std::vector<unsigned int> PmergeMe::fordJohnson(std::vector<unsigned int> Arg)
-{
-	//  std::vector<unsigned int> result;
-
-    if (Arg.size() <= 1)
-	{
-    	return Arg;
+unsigned int jacobsthal(unsigned int n) {
+	if (n == 0) return 0;
+	if (n == 1) return 1;
+	unsigned int a = 0, b = 1, j = 0;
+	for (unsigned int i = 2; i <= n; ++i) {
+		j = b + 2 * a;
+		a = b;
+		b = j;
 	}
-	unsigned int odd;
-	this->odd = false;
-	if (Arg.size() % 2 == 1)
-	{
-		this->odd = true;
-		odd = Arg.back();
-		Arg.pop_back();
-	}
-	std::vector<std::pair<unsigned int, unsigned int> > pairs;
-	for(size_t i = 0; i + 1 < Arg.size(); i+=2)
-	{
-		pairs.push_back(std::make_pair(Arg[i], Arg[i + 1]));
-	}
-	for(std::vector<std::pair<unsigned int,unsigned int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
-	{
-		if(it->first < it->second)
-			std::swap(it->first, it->second);
-	}
-	std::vector<unsigned int> a;
-	std::vector<unsigned int> b;
-	for(std::vector<std::pair<unsigned int,unsigned int> >::iterator it = pairs.begin(); it != pairs.end(); ++it)
-	{
-		a.push_back(it->first);
-		b.push_back(it->second);
-	}
-	if (this->odd == true)
-	{
-		b.push_back(odd);
-		this->odd = false;
-	}
-	std::vector<unsigned int> main_chain = fordJohnson(a);
-	//test recursion
-	std::cout << "Main chain: ";
-    for (size_t i = 0; i < main_chain.size(); ++i)
-    {
-        std::cout << main_chain[i] << " ";
-    }
-    std::cout << std::endl;
-
-    return main_chain;
-	
+	return j;
 }
 
-// std::vector<unsigned int> PmergeMe::fordJohnson(std::vector<unsigned int> &Arg)
-// {
-//     if (Arg.size() <= 1)
-//         return Arg;
+std::vector<size_t> jacobsthal_insertion_order(size_t n) {
+	std::vector<size_t> result;
+	std::vector<bool> seen(n, false);  // Marks which indices we've already added
 
-//     unsigned int odd;
-//     this->odd = false;
-//     if (Arg.size() % 2 == 1)
-//     {
-//         this->odd = true;
-//         odd = Arg.back();
-//         Arg.pop_back();
-//     }
+	// Generate Jacobsthal sequence
+	for (size_t j = 1; ; ++j) {
+		size_t idx = jacobsthal(j);
+		if (idx >= n)
+			break;
+		if (!seen[idx]) {
+			result.push_back(idx);
+			seen[idx] = true;
+		}
+	}
 
-//     std::vector<std::pair<unsigned int, unsigned int> > pairs;
-//     for (size_t i = 0; i + 1 < Arg.size(); i += 2)
-//         pairs.push_back(std::make_pair(Arg[i], Arg[i + 1]));
+	// Always include 0 first if not already
+	if (!seen[0]) {
+		result.insert(result.begin(), 0);
+		seen[0] = true;
+	}
 
-//     for (size_t i = 0; i < pairs.size(); ++i)
-//     {
-//         if (pairs[i].first < pairs[i].second)
-//             std::swap(pairs[i].first, pairs[i].second);
-//     }
+	// Append missing indices in increasing order
+	for (size_t i = 0; i < n; ++i) {
+		if (!seen[i]) {
+			result.push_back(i);
+			seen[i] = true;
+		}
+	}
 
-//     std::vector<unsigned int> a; // larger elements
-//     std::vector<unsigned int> b; // smaller elements
-//     for (size_t i = 0; i < pairs.size(); ++i)
-//     {
-//         a.push_back(pairs[i].first);
-//         b.push_back(pairs[i].second);
-//     }
-//     if (this->odd)
-//         b.push_back(odd);
+	return result;
+}
 
-//     // Print before sorting
-//     std::cout << "Unsorted main chain (a): ";
-//     for (size_t i = 0; i < a.size(); ++i)
-//         std::cout << a[i] << " ";
-//     std::cout << std::endl;
+std::vector<unsigned int> PmergeMe::fordJohnson(std::vector<unsigned int> &Arg) {
+	// Print input at this recursion level
+	std::cout << "Input Arg: ";
+	for (size_t i = 0; i < Arg.size(); ++i)
+		std::cout << Arg[i] << " ";
+	std::cout << "\n";
 
-//     // Recursive sort of a
-//     std::vector<unsigned int> sorted_a = fordJohnson(a);
+	if (Arg.size() <= 1)
+		return Arg;
 
-//     // Print after sorting
-//     std::cout << "Sorted main chain: ";
-//     for (size_t i = 0; i < sorted_a.size(); ++i)
-//         std::cout << sorted_a[i] << " ";
-//     std::cout << std::endl;
+	bool has_odd = Arg.size() % 2 != 0;
+	unsigned int odd = 0;
+	if (has_odd) {
+		odd = Arg.back();
+		Arg.pop_back();
+		std::cout << "Straggler (odd element): " << odd << "\n";
+	}
 
-//     return sorted_a;
-// }
+	std::vector<std::pair<unsigned int, unsigned int> > pairs;
+	for (size_t i = 0; i + 1 < Arg.size(); i += 2) {
+		if (Arg[i] >= Arg[i + 1])
+			pairs.push_back(std::make_pair(Arg[i], Arg[i + 1]));
+		else
+			pairs.push_back(std::make_pair(Arg[i + 1], Arg[i]));
+	}
 
-//temp to test pairing and sorting
-// std::vector<unsigned int> PmergeMe::fordJohnson(std::vector<unsigned int> Arg)
-// {
-//     if (Arg.size() <= 1)
-//         return Arg;
+	std::cout << "Pairs (larger, smaller): ";
+	for (size_t i = 0; i < pairs.size(); ++i)
+		std::cout << "(" << pairs[i].first << "," << pairs[i].second << ") ";
+	std::cout << "\n";
 
-//     unsigned int odd;
-//     this->odd = false;
-//     if (Arg.size() % 2 == 1)
-//     {
-//         this->odd = true;
-//         odd = Arg.back();
-//         Arg.pop_back();
-//     }
+	std::vector<unsigned int> a, b;
+	for (size_t i = 0; i < pairs.size(); ++i) {
+		a.push_back(pairs[i].first);
+		b.push_back(pairs[i].second);
+	}
+	if (has_odd) {
+		b.push_back(odd);
+		std::cout << "Appended straggler to b: " << odd << "\n";
+	}
 
-//     std::vector<std::pair<unsigned int, unsigned int> > pairs;
-//     for (size_t i = 0; i + 1 < Arg.size(); i += 2)
-//         pairs.push_back(std::make_pair(Arg[i], Arg[i + 1]));
+	std::cout << "Main chain before recursive sort (a): ";
+	for (size_t i = 0; i < a.size(); ++i) std::cout << a[i] << " ";
+	std::cout << "\nPending insertions (b): ";
+	for (size_t i = 0; i < b.size(); ++i) std::cout << b[i] << " ";
+	std::cout << "\n";
 
-//     for (size_t i = 0; i < pairs.size(); ++i)
-//     {
-//         if (pairs[i].first < pairs[i].second)
-//             std::swap(pairs[i].first, pairs[i].second);
-//     }
+	std::vector<unsigned int> main_chain = fordJohnson(a);  // Recursive sort on a
 
-//     std::vector<unsigned int> a; // main chain
-//     std::vector<unsigned int> b; // pend chain
-//     for (size_t i = 0; i < pairs.size(); ++i)
-//     {
-//         a.push_back(pairs[i].first);  // larger
-//         b.push_back(pairs[i].second); // smaller
-//     }
+	std::cout << "Sorted main chain (after recursion): ";
+	for (size_t i = 0; i < main_chain.size(); ++i) std::cout << main_chain[i] << " ";
+	std::cout << "\n";
 
-//     if (this->odd)
-//         b.push_back(odd);
+	// Track where each a[i] came from
+	std::vector<size_t> a_origin_index;
+	for (size_t i = 0; i < main_chain.size(); ++i) {
+		for (size_t j = 0; j < pairs.size(); ++j) {
+			if (pairs[j].first == main_chain[i]) {
+				a_origin_index.push_back(j);
+				break;
+			}
+		}
+	}
 
-//     std::cout << "Unsorted main chain (a): ";
-//     for (size_t i = 0; i < a.size(); ++i)
-//         std::cout << a[i] << " ";
-//     std::cout << std::endl;
+	std::vector<size_t> pend_order = jacobsthal_insertion_order(b.size());
 
-//     // Temporarily sort main chain
-//     std::sort(a.begin(), a.end());
+	std::cout << "Jacobsthal insertion order: ";
+	for (size_t i = 0; i < pend_order.size(); ++i)
+		std::cout << pend_order[i] << " ";
+	std::cout << "\n";
 
-//     std::cout << "Sorted main chain: ";
-//     for (size_t i = 0; i < a.size(); ++i)
-//         std::cout << a[i] << " ";
-//     std::cout << std::endl;
+	for (size_t k = 0; k < pend_order.size(); ++k)
+	{
+		size_t bi = pend_order[k];
+		if (bi >= b.size()) continue;
 
-//     return a;
-// }
+		unsigned int val = b[bi];
+		std::cout << "Inserting: " << val << " from b[" << bi << "]\n";
+
+		// Corrected insertion limit logic
+		unsigned int pair_first = pairs[bi].first;
+		size_t limit_idx = 0;
+		for (; limit_idx < main_chain.size(); ++limit_idx) {
+			if (main_chain[limit_idx] == pair_first)
+				break;
+		}
+
+		std::cout << "Insertion limit (up to index): " << limit_idx << "\n";
+
+		std::vector<unsigned int>::iterator insert_pos = 
+    	std::lower_bound(main_chain.begin(), main_chain.begin() + std::min(limit_idx + 1, main_chain.size()), val);
+		main_chain.insert(insert_pos, val);
+
+		std::cout << "Main chain after inserting " << val << ": ";
+		for (size_t i = 0; i < main_chain.size(); ++i)
+			std::cout << main_chain[i] << " ";
+		std::cout << "\n";
+}
+
+
+	std::cout << "Final main chain at this level: ";
+	for (size_t i = 0; i < main_chain.size(); ++i)
+		std::cout << main_chain[i] << " ";
+	std::cout << "\n\n";
+
+	return main_chain;
+}
