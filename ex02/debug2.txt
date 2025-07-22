@@ -1,0 +1,94 @@
+Before: 20 67 60 45 17 58 10 191 708 44 85 2 514 309 94 102 101 2025 289 677
+Input Arg: 20 67 60 45 17 58 10 191 708 44 85 2 514 309 94 102 101 2025 289 677 
+Pairs (larger, smaller): (67,20) (60,45) (58,17) (191,10) (708,44) (85,2) (514,309) (102,94) (2025,101) (677,289) 
+Main chain before recursive sort (a): 67 60 58 191 708 85 514 102 2025 677 
+Pending insertions (b): 20 45 17 10 44 2 309 94 101 289 
+Input Arg: 67 60 58 191 708 85 514 102 2025 677 
+Pairs (larger, smaller): (67,60) (191,58) (708,85) (514,102) (2025,677) 
+Main chain before recursive sort (a): 67 191 708 514 2025 
+Pending insertions (b): 60 58 85 102 677 
+Input Arg: 67 191 708 514 2025 
+Straggler (odd element): 2025
+Pairs (larger, smaller): (191,67) (708,514) 
+Appended straggler to b: 2025
+Main chain before recursive sort (a): 191 708 
+Pending insertions (b): 67 514 2025 
+Input Arg: 191 708 
+Pairs (larger, smaller): (708,191) 
+Main chain before recursive sort (a): 708 
+Pending insertions (b): 191 
+Input Arg: 708 
+Sorted main chain (after recursion): 708 
+Jacobsthal insertion order: 0 
+Inserting: 191 from b[0]
+Insertion limit (up to index): 0
+Main chain after inserting 191: 191 708 
+Final main chain at this level: 191 708 
+
+Sorted main chain (after recursion): 191 708 
+Jacobsthal insertion order: 0 1 2 
+Inserting: 67 from b[0]
+Insertion limit (up to index): 0
+Main chain after inserting 67: 67 191 708 
+Inserting: 514 from b[1]
+Insertion limit (up to index): 2
+Main chain after inserting 514: 67 191 514 708 
+Inserting: 2025 from b[2]
+Insertion limit (up to index): 4
+Main chain after inserting 2025: 67 191 514 708 2025 
+Final main chain at this level: 67 191 514 708 2025 
+
+Sorted main chain (after recursion): 67 191 514 708 2025 
+Jacobsthal insertion order: 0 1 3 2 4 
+Inserting: 60 from b[0]
+Insertion limit (up to index): 0
+Main chain after inserting 60: 60 67 191 514 708 2025 
+Inserting: 58 from b[1]
+Insertion limit (up to index): 2
+Main chain after inserting 58: 58 60 67 191 514 708 2025 
+Inserting: 102 from b[3]
+Insertion limit (up to index): 4
+Main chain after inserting 102: 58 60 67 102 191 514 708 2025 
+Inserting: 85 from b[2]
+Insertion limit (up to index): 6
+Main chain after inserting 85: 58 60 67 85 102 191 514 708 2025 
+Inserting: 677 from b[4]
+Insertion limit (up to index): 8
+Main chain after inserting 677: 58 60 67 85 102 191 514 677 708 2025 
+Final main chain at this level: 58 60 67 85 102 191 514 677 708 2025 
+
+Sorted main chain (after recursion): 58 60 67 85 102 191 514 677 708 2025 
+Jacobsthal insertion order: 0 1 3 5 2 4 6 7 8 9 
+Inserting: 20 from b[0]
+Insertion limit (up to index): 2
+Main chain after inserting 20: 20 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 45 from b[1]
+Insertion limit (up to index): 2
+Main chain after inserting 45: 20 45 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 10 from b[3]
+Insertion limit (up to index): 7
+Main chain after inserting 10: 10 20 45 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 2 from b[5]
+Insertion limit (up to index): 6
+Main chain after inserting 2: 2 10 20 45 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 17 from b[2]
+Insertion limit (up to index): 4
+Main chain after inserting 17: 2 10 17 20 45 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 44 from b[4]
+Insertion limit (up to index): 13
+Main chain after inserting 44: 2 10 17 20 44 45 58 60 67 85 102 191 514 677 708 2025 
+Inserting: 309 from b[6]
+Insertion limit (up to index): 12
+Main chain after inserting 309: 2 10 17 20 44 45 58 60 67 85 102 191 309 514 677 708 2025 
+Inserting: 94 from b[7]
+Insertion limit (up to index): 10
+Main chain after inserting 94: 2 10 17 20 44 45 58 60 67 85 94 102 191 309 514 677 708 2025 
+Inserting: 101 from b[8]
+Insertion limit (up to index): 17
+Main chain after inserting 101: 2 10 17 20 44 45 58 60 67 85 94 101 102 191 309 514 677 708 2025 
+Inserting: 289 from b[9]
+Insertion limit (up to index): 16
+Main chain after inserting 289: 2 10 17 20 44 45 58 60 67 85 94 101 102 191 289 309 514 677 708 2025 
+Final main chain at this level: 2 10 17 20 44 45 58 60 67 85 94 101 102 191 289 309 514 677 708 2025 
+
+Sorted: 2 10 17 20 44 45 58 60 67 85 94 101 102 191 289 309 514 677 708 2025 

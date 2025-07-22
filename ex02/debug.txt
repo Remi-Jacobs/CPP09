@@ -1,36 +1,36 @@
-Before: 20 45 60 67 17 58
-Input Arg: 20 45 60 67 17 58 
-Pairs (larger, smaller): (45,20) (67,60) (58,17) 
-Main chain before recursive sort (a): 45 67 58 
-Pending insertions (b): 20 60 17 
-Input Arg: 45 67 58 
-Straggler (odd element): 58
-Pairs (larger, smaller): (67,45) 
-Appended straggler to b: 58
+Before: 20 67 60 45 17 89
+Input Arg: 20 67 60 45 17 89 
+Pairs (larger, smaller): (67,20) (60,45) (89,17) 
+Main chain before recursive sort (a): 67 60 89 
+Pending insertions (b): 20 45 17 
+Input Arg: 67 60 89 
+Straggler (odd element): 89
+Pairs (larger, smaller): (67,60) 
+Appended straggler to b: 89
 Main chain before recursive sort (a): 67 
-Pending insertions (b): 45 58 
+Pending insertions (b): 60 89 
 Input Arg: 67 
 Sorted main chain (after recursion): 67 
 Jacobsthal insertion order: 0 1 
-Inserting: 45 from b[0]
+Inserting: 60 from b[0]
 Insertion limit (up to index): 0
-Main chain after inserting 45: 45 67 
-Inserting: 58 from b[1]
+Main chain after inserting 60: 60 67 
+Inserting: 89 from b[1]
 Insertion limit (up to index): 2
-Main chain after inserting 58: 45 58 67 
-Final main chain at this level: 45 58 67 
+Main chain after inserting 89: 60 67 89 
+Final main chain at this level: 60 67 89 
 
-Sorted main chain (after recursion): 45 58 67 
+Sorted main chain (after recursion): 60 67 89 
 Jacobsthal insertion order: 0 1 2 
 Inserting: 20 from b[0]
-Insertion limit (up to index): 0
-Main chain after inserting 20: 20 45 58 67 
-Inserting: 60 from b[1]
-Insertion limit (up to index): 3
-Main chain after inserting 60: 20 45 58 60 67 
+Insertion limit (up to index): 1
+Main chain after inserting 20: 20 60 67 89 
+Inserting: 45 from b[1]
+Insertion limit (up to index): 1
+Main chain after inserting 45: 20 45 60 67 89 
 Inserting: 17 from b[2]
-Insertion limit (up to index): 2
-Main chain after inserting 17: 17 20 45 58 60 67 
-Final main chain at this level: 17 20 45 58 60 67 
+Insertion limit (up to index): 4
+Main chain after inserting 17: 17 20 45 60 67 89 
+Final main chain at this level: 17 20 45 60 67 89 
 
-Sorted: 17 20 45 58 60 67 
+Sorted: 17 20 45 60 67 89 
